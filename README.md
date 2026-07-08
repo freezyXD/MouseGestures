@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Mouse, trackpad & keyboard gestures for macOS</strong><br>
-  Hold a button, swipe a direction, fire an action — without leaving the mouse.
+  Hold a button, swipe a direction, fire an action - without leaving the mouse.
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@
 
 macOS gives trackpad users a rich gesture vocabulary. Mouse users mostly get scroll wheels and a context menu.
 
-**MouseGestures** fills that gap: hold a trigger, drag in a direction, release — and run a shortcut, a shell command, or AppleScript. The same muscle memory works across browsers, editors, and the system.
+**MouseGestures** fills that gap: hold a trigger, drag in a direction, release - and run a shortcut, a shell command, or AppleScript. The same muscle memory works across browsers, editors, and the system.
 
 ```
 Right-button  +  ←   →  ⌘[   (Back)
@@ -47,13 +47,13 @@ Right-button  +  ↓   →  ⌘ Page Down
 | | |
 |---|---|
 | **🖱 Mouse gestures** | Any button (left, right, middle, X1/X2, or custom). Eight directions including diagonals. |
-| **✋ Trackpad** | Swipes, pinch, rotate, smart zoom — with system presets (Mission Control, App Exposé, …). |
+| **✋ Trackpad** | Swipes, pinch, rotate, smart zoom - with system presets (Mission Control, App Exposé, …). |
 | **⌨️ Hotkeys** | Global keyboard shortcuts that fire actions instantly. |
 | **🔑 Hold key + drag** | Hold a key combo, move the mouse, release to confirm direction. |
 | **⚡ Actions** | Key combo · Shell (`/bin/sh -c`) · AppleScript · or none. |
 | **👁 Feedback overlay** | Minimal circle + arrow under the cursor; system cursor hides while tracking. |
 | **🎛 Preferences** | SwiftUI settings, shortcut recorder, gesture editor, permission status. |
-| **📌 Menu bar** | Lightweight accessory app — no Dock icon. Enable / feedback / launch at login / quit. |
+| **📌 Menu bar** | Lightweight accessory app - no Dock icon. Enable / feedback / launch at login / quit. |
 | **💾 JSON config** | Atomic save, size limits, file permissions `0600`, versioned migrations. |
 | **🚀 Launch at login** | Modern `SMAppService` (macOS 13+). |
 
@@ -62,8 +62,8 @@ Right-button  +  ↓   →  ⌘ Page Down
 ## Requirements
 
 - **macOS 13** (Ventura) or later  
-- **Accessibility** — mouse button capture & key synthesis  
-- **Input Monitoring** — keyboard shortcuts and trackpad gestures  
+- **Accessibility** - mouse button capture & key synthesis  
+- **Input Monitoring** - keyboard shortcuts and trackpad gestures  
 - To build: **Xcode** or Command Line Tools (`swift`)
 
 ---
@@ -106,7 +106,7 @@ Prefer the packaged `.app` for realistic menu-bar and permission behaviour.
 3. Pick a **trigger** (mouse / trackpad / hotkey / hold key)
 4. Choose a **direction** (when applicable)
 5. Set an **action** (record a shortcut, or write shell / AppleScript)
-6. Hold the trigger, drag, release — done
+6. Hold the trigger, drag, release - done
 
 ### Default bindings
 
@@ -201,7 +201,7 @@ Without Input Monitoring, **mouse gestures still work**; hotkeys and trackpad tr
 
 MouseGestures is a **power-user tool**, not a sandboxed App Store app. Global event taps and Accessibility are incompatible with sandboxing.
 
-- Shell & AppleScript run **with your user privileges** — only save commands you trust  
+- Shell & AppleScript run **with your user privileges** - only save commands you trust  
 - Dangerous actions show a **confirmation** when saving in Preferences  
 - Config file is capped at **256 KB**, written atomically, mode **`0600`**  
 - Process stdout is not fully logged; stderr snippets use private logging  
