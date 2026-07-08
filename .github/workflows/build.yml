@@ -1,0 +1,93 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Test (macOS ${{ matrix.macos }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            macos: "14"
+          - runner: macos-15
+            macos: "15"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.macos }}.0.app/Contents/Developer
+
+      - name: Show toolchain
+        run: |
+          swift --version
+          xcodebuild -version
+
+      - name: Cache SwiftPM artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ matrix.macos }}-${{ hashFiles('Package.resolved', 'Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-${{ matrix.macos }}-
+
+      - name: Run tests
+        run: swift test
+
+      - name: Build .app bundle
+        run: ./scripts/build-app.sh
+
+      - name: Zip .app
+        run: |
+          cd build
+          ditto -c -k --sequesterRsrc --keepParent MouseGestures.app MouseGestures-${{ matrix.macos }}.zip
+
+      - name: Upload .app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MouseGestures-${{ matrix.macos }}
+          path: build/MouseGestures-${{ matrix.macos }}.zip
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download macOS 14 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MouseGestures-14
+          path: dist
+
+      - name: Download macOS 15 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MouseGestures-15
+          path: dist
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/MouseGestures-14.zip
+            dist/MouseGestures-15.zip
+          generate_release_notes: true
